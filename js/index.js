@@ -24,7 +24,7 @@ const app = Vue.createApp({
                         expires = ${new Date(expired)};
                         path = / `;
 
-                        window.location = '../html/product.html'
+                        window.location = '../vue3/html/product.html'
                     }
                     else {
                         console.log(res.data.message);
