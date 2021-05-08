@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>商品管理頁面</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <link rel="stylesheet" href="../css/all.css">
 </head>
 
@@ -22,7 +23,7 @@
         </div>
       </div>
       <div class="row">
-        <table class="table align-middle">
+        <table class="table table-striped table-borderless table-hover align-middle mb-5">
           <thead class="text-center">
             <tr>
               <th scope="col">分類</th>
@@ -34,8 +35,8 @@
               <th scope="col" colspan="2" class="text-center">編輯</th>
             </tr>
           </thead>
-          <tbody v-for="(item, arr) in products" :key="item.id">
-            <tr class="text-center">
+          <tbody>
+            <tr v-for="(item, arr) in products" :key="item.id" class="text-center">
               <th scope="row">{{ item.category }}</th>
               <td>{{ item.title }}</td>
               <td>$ {{ item.origin_price }}</td>
@@ -61,15 +62,46 @@
     </div>
 
     <div class="modal fade" tabindex="-1" id="productModal" ref="productModal">
-      <edit-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" @update="getData">
+      <edit-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" @update="openModal" @get-error="openModal">
       </edit-modal>
     </div>
 
 
     <div class="modal fade" tabindex="-1" id="delProductModal" ref="delProductModal">
-      <del-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" @update="getData"></del-modal>
+      <del-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" @update="openModal" @get-error="openModal"></del-modal>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="errorAlertModal" ref="errorAlertModal">
+      <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content border-0 border-bottom border-danger border-5">
+          <div class="d-flex justify-content-between align-items-center flex-column py-5 mb-0 text-danger" role="alert">
+            <p class="material-icons-round h1 mb-3 alert-icon">error</p>
+            <p class="h3 fw-bold px-4">操作失敗</p>
+            <p class="mb-4">{{ alertMessage }}</p>
+            <button type="button" class="btn btn-danger w-25 mt-2 mb-1" data-bs-dismiss="modal" aria-label="Close">確認
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="successAlertModal" ref="successAlertModal">
+      <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content border-0 border-bottom border-success border-5">
+          <div class="d-flex justify-content-between align-items-center flex-column py-5 mb-0 text-success"
+            role="alert">
+            <p class="material-icons-round h1 mb-3 alert-icon">check_circle</p>
+            <p class="h3 fw-bold px-4">操作成功</p>
+            <p class="mb-4">{{ alertMessage }}</p>
+            <button type="button" class="btn btn-success w-25 mt-2 mb-1" data-bs-dismiss="modal" aria-label="Close"
+            @click.prevent="getData">確認
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+
 
 
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

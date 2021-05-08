@@ -1,5 +1,5 @@
-// import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js';
-
+let errorAlertModal = null;
+let successAlertModal = null;
 
 const app = Vue.createApp({
     data() {
@@ -8,25 +8,33 @@ const app = Vue.createApp({
                 username: '',
                 password: '',
             },
+            rememberEmailCheck: false,
         }
     },
+    mounted() {
+        errorAlertModal = new bootstrap.Modal(this.$refs.errorAlertModal);
+        successAlertModal = new bootstrap.Modal(this.$refs.successAlertModal, {
+            backdrop: 'static',
+            keyboard: false
+        });
+    },
     created() {
-        let token = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        if (token !== '') window.location = './html/product.html';
+        this.user.username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     },
     methods: {
         login() {
             const api = 'https://dev-vue-course-api.hexschool.io/admin/signin';
-
             axios.post(api, this.user)
                 .then((res) => {
                     if (res.data.success) {
+                        document.cookie = this.rememberEmailCheck ? `username=${this.user.username};` : "username=;";
                         const { token, expired } = res.data;
                         document.cookie = ` user=${token}; expires=${new Date(expired)};`;
-                        window.location = './html/product.html'
+                        successAlertModal.show();
                     }
                     else {
-                        console.log(res.data.message);
+                        errorAlertModal.show();
+                        console.log(res.data)
                     }
                 })
                 .catch((err) => {

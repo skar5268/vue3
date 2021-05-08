@@ -1,20 +1,22 @@
 export default {
-  template: `<div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header modal-danger">
-        <h5 class="modal-title">刪除商品</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>是否要刪除 {{ newProduct.title }} 商品</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-          @click.prevent="delProduct()">確認刪除</button>
-      </div>
+  template: `<div class="modal-dialog modal-md  modal-dialog-centered">
+  <div class="modal-content border-0">
+    <div class="modal-header bg-danger py-2">
+      <h5 class="modal-title fw-bold text-light">{{ modalTitle }}</h5>
+      <button type="button" class="btn text-light" data-bs-dismiss="modal" aria-label="Close">
+        <span class="material-icons-round lh-base">close</span>
+      </button>
+    </div>
+    <div class="modal-body py-4">
+      <p>是否要刪除 <span class="fw-bold text-danger"> {{ newProduct.title }} </span> 商品</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn border-primary" data-bs-dismiss="modal">取消</button>
+      <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+        @click.prevent="delProduct()">確認刪除</button>
     </div>
   </div>
+</div>
 </div>`,
 
   props: ['newProduct', 'modalTitle', 'products'],
@@ -27,10 +29,10 @@ export default {
       axios.delete(url)
         .then(res => {
           if (!res.data.success) return;
-          this.$emit('update');
+          this.$emit('update', 'success', 0, res.data.message);
         })
         .catch(err => {
-          console.log(err);
+          this.$emit('getError', 'error', 0, err.message);
         })
     },
   }

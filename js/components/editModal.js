@@ -1,11 +1,13 @@
 export default {
-    template: `<div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title  fw-bold">{{ modalTitle }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  template: `<div class="modal-dialog modal-lg  modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-primary py-2">
+          <h5 class="modal-title fw-bold text-light">{{ modalTitle }}</h5>
+          <button type="button" class="btn text-light"  data-bs-dismiss="modal" aria-label="Close">
+           <span class="material-icons-round lh-base">close</span>
+          </button>
         </div>
-        <div class="modal-body  needs-validation" novalidate>
+        <div class="modal-body py-4">
           <div class="container-fluid">
             <div class="row">
               <div class="col-12 col-md-4">
@@ -64,57 +66,54 @@ export default {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn border-primary" data-bs-dismiss="modal">取消</button>
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
             @click.prevent="updateProduct(modalTitle=='新增商品'? 'add':'edit', newProduct.id)">確認</button>
         </div>
       </div>
     </div>`,
 
-    props: ['newProduct', 'modalTitle', 'products'],
+  props: ['newProduct', 'modalTitle', 'products'],
 
-    methods: {
-        updateProduct(update) {
-            const apiPath = "skar5268";
-            const baseUrl = "https://vue-course-api.hexschool.io/api";
-            let url = `${baseUrl}/${apiPath}/admin/product`;
-            let data = {};
-            switch (update) {
-                case 'add':
-                    this.newProduct.id = Date.now();
-                    data = { data: this.newProduct };
+  methods: {
+    updateProduct(update) {
+      const apiPath = "skar5268";
+      const baseUrl = "https://vue-course-api.hexschool.io/api";
+      let url = `${baseUrl}/${apiPath}/admin/product`;
+      let data = {};
+      switch (update) {
+        case 'add':
+          this.newProduct.id = Date.now();
+          data = { data: this.newProduct };
+          axios.post(url, data)
+            .then(res => {
+              if (!res.data.success) return;
+              this.$emit('update', 'success', 0, res.data.message);
+            })
+            .catch(err => {
+              this.$emit('getError', 'error', 0, err.message);
+            })
 
-                    axios.post(url, data)
-                        .then(res => {
-                            if (!res.data.success) return;
-                            this.$emit('update');
-                            console.log(res)
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        })
+          break;
 
-                    break;
+        case 'edit':
+          url = `${baseUrl}/${apiPath}/admin/product/${this.newProduct.id}`;
+          data = { data: this.newProduct };
 
-                case 'edit':
-                    url = `${baseUrl}/${apiPath}/admin/product/${this.newProduct.id}`;
-                    data = { data: this.newProduct };
+          axios.put(url, { data: this.newProduct })
+            .then(res => {
+              if (!res.data.success) return;
+              this.$emit('update', 'success', 0, res.data.message);
+            })
+            .catch(err => {
+              this.$emit('getError', 'error', 0, err.message);
+            })
 
-                    axios.put(url, { data: this.newProduct })
-                        .then(res => {
-                            if (!res.data.success) return;
-                            this.$emit('update');
-                            // console.log(res)
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        })
+          break;
 
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        default:
+          break;
+      }
     }
+  }
 }

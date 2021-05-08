@@ -9,11 +9,14 @@ const token = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.
 
 let productModal = null;
 let delProductModal = null;
+let errorAlertModal = null;
+let successAlertModal = null;
 
 const app = Vue.createApp({
   data() {
     return {
       modalTitle: "",
+      alertMessage: "",
       newProduct: {},
       products: [],
       pagination: {},
@@ -23,6 +26,11 @@ const app = Vue.createApp({
   mounted() {
     productModal = new bootstrap.Modal(this.$refs.productModal);
     delProductModal = new bootstrap.Modal(this.$refs.delProductModal);
+    errorAlertModal = new bootstrap.Modal(this.$refs.errorAlertModal);
+    successAlertModal = new bootstrap.Modal(this.$refs.successAlertModal, {
+      backdrop: 'static',
+      keyboard: false
+    });
   },
 
   created() {
@@ -77,14 +85,16 @@ const app = Vue.createApp({
       axios.put(url, { data: this.newProduct })
         .then(res => {
           if (!res.data.success) return;
-          this.getData();
+          this.openModal('success');
         })
         .catch(err => {
+          this.openModal('error');
           console.log(err);
         })
     },
 
-    openModal(isNew, arr) {
+    openModal(isNew, arr, message) {
+      this.alertMessage = message;
       switch (isNew) {
         case 'new':
           this.modalTitle = "新增商品";
@@ -99,8 +109,17 @@ const app = Vue.createApp({
           break;
 
         case 'delete':
+          this.modalTitle = "刪除商品"
           this.newProduct = { ...this.products[arr] };
           delProductModal.show();
+          break;
+
+        case 'error':
+          errorAlertModal.show();
+          break;
+
+        case 'success':
+          successAlertModal.show();
           break;
 
         default:
