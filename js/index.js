@@ -10,6 +10,10 @@ const app = Vue.createApp({
             },
         }
     },
+    created() {
+        let token = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (token !== '') window.location = './html/product.html';
+    },
     methods: {
         login() {
             const api = 'https://dev-vue-course-api.hexschool.io/admin/signin';
@@ -17,14 +21,9 @@ const app = Vue.createApp({
             axios.post(api, this.user)
                 .then((res) => {
                     if (res.data.success) {
-                        // console.log(res.data.message);
                         const { token, expired } = res.data;
-
-                        document.cookie = ` user = ${token}; 
-                        expires = ${new Date(expired)};
-                        path = / `;
-
-                        window.location = '../vue3/html/product.html'
+                        document.cookie = ` user=${token}; expires=${new Date(expired)};`;
+                        window.location = './html/product.html'
                     }
                     else {
                         console.log(res.data.message);
