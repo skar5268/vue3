@@ -14,12 +14,13 @@
   <div id="app">
     <div class="container mt-5">
       <div class="row g-0 justify-content-end mb-5">
-        <button class="col-1 btn btn-primary btn-sm" @click="logOut">登出</button>
+        <button class="col-1 btn btn-primary" @click="logOut">登出</button>
       </div>
       <div class="row g-0 mb-5">
         <h2 class="col-12 col-md-8 text-center text-md-start fw-bold mb-3 mb-md-0">商品管理頁面</h2>
         <div class="col-12 col-md-4 text-center text-md-end">
-          <button class="btn btn-primary mb-3" v-on:click="openModal('new')">+ 建立新的商品</button>
+          <button class="btn btn-primary mb-3" v-on:click="openModal('new')">
+            <span class="material-icons-round align-bottom">add</span> 建立新的商品</button>
         </div>
       </div>
       <div class="row">
@@ -62,13 +63,15 @@
     </div>
 
     <div class="modal fade" tabindex="-1" id="productModal" ref="productModal">
-      <edit-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" @update="openModal" @get-error="openModal">
+      <edit-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" @update="openModal"
+        @get-error="openModal">
       </edit-modal>
     </div>
 
 
     <div class="modal fade" tabindex="-1" id="delProductModal" ref="delProductModal">
-      <del-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" @update="openModal" @get-error="openModal"></del-modal>
+      <del-modal :new-product="newProduct" :modal-title="modalTitle" :products="products" :title="newProduct.title"
+        @update="openModal" @get-error="openModal"></del-modal>
     </div>
 
     <div class="modal fade" tabindex="-1" id="errorAlertModal" ref="errorAlertModal">
@@ -90,11 +93,23 @@
           <div class="d-flex justify-content-between align-items-center flex-column py-5 mb-0 text-success"
             role="alert">
             <p class="material-icons-round h1 mb-3 alert-icon">check_circle</p>
-            <p class="h3 fw-bold px-4">操作成功</p>
-            <p class="mb-4">{{ alertMessage }}</p>
+            <p class="h3 fw-bold px-4 mb-4">{{ alertMessage }}</p>
             <button type="button" class="btn btn-success w-25 mt-2 mb-1" data-bs-dismiss="modal" aria-label="Close"
-            @click.prevent="getData">確認
+              @click.prevent="getData">確認
             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="signOutModal" ref="signOutModal">
+      <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content border-0 border-bottom border-warning border-5">
+          <div class="d-flex justify-content-between align-items-center flex-column py-5 mb-0 text-warning"
+            role="alert">
+            <p class="material-icons-round h1 mb-3 alert-icon">info</p>
+            <p class="h3 fw-bold px-4">{{ alertMessage }}</p>
+            <a class="btn btn-warning w-25 mt-2 mb-1 text-light" href="../index.html">確認
+            </a>
           </div>
         </div>
       </div>

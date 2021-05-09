@@ -19,3 +19,10 @@ a {
 .modal-open{
     overflow: visible;
 }
+
+img{
+    display: block;
+    object-fit: cover;
+    width: 100%;
+    height: auto;    
+}

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <div id="app" class=" bg-light">
+    <div id="app" class="bg-light">
         <div class="container">
             <div class="row justify-content-center align-items-center vh-100">
                 <div class="col-8 py-6 rounded-3 bg-white shadow-sm">
@@ -20,26 +20,28 @@
                             <h2 class="h1 fw-bold text-center mb-5">
                                 <span class=" d-inline-block pb-2 border-bottom border-primary border-3"> LOGIN</span>
                             </h2>
-                            <form @submit.prevent="login">
+                            <v-form v-slot="{ errors }" @submit="login">
                                 <div class="form-floating mb-4">
-                                    <input type="email" class="form-control fw-bold" id="username"
-                                        placeholder="Email Address" v-model.lazy.trim="user.username" required>
+                                    <v-field type="email" class="form-control fw-bold" id="username" name="Email"
+                                        placeholder="Email Address" v-model.lazy.trim="user.username"
+                                        rules="required|email" :class="{ 'is-invalid': errors['Email'] }"></v-field>
                                     <label for="username" class="text-black-50 pb-5">Email Address</label>
                                 </div>
                                 <div class="form-floating mb-4">
-                                    <input type="password" class="form-control" id="userPassword" placeholder="Password"
-                                        v-model.lazy.trim="user.password" required>
+                                    <v-field type="password" class="form-control" id="userPassword" name="password"
+                                        placeholder="Password" v-model.lazy.trim="user.password" rules="required"
+                                        :class="{ 'is-invalid': errors['password']}"></v-field>
                                     <label for="userPassword" class="text-black-50">Password</label>
                                 </div>
                                 <div class="form-check mb-4">
                                     <input class="form-check-input" type="checkbox" id="rememberEmailCheck"
-                                    v-model="rememberEmailCheck" value="rememberEmailCheck">
+                                        v-model="rememberEmailCheck" value="rememberEmailCheck">
                                     <label class="form-check-label d-block" for="rememberEmailCheck">
                                         記住帳號
                                     </label>
                                 </div>
                                 <button class="btn btn-lg btn-primary w-100" type="submit">登入</button>
-                            </form>
+                            </v-form>
                         </div>
                     </div>
                 </div>
@@ -83,6 +85,11 @@
         crossorigin="anonymous"></script>
 
     <script src="https://unpkg.com/vue@next"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/4.1.17/vee-validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/i18n@4.1.17/dist/vee-validate-i18n.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/rules@4.1.17/dist/vee-validate-rules.min.js"></script>
+
 
     <script src="js/index.js" type="module"></script>
 

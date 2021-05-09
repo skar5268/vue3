@@ -11,6 +11,7 @@ let productModal = null;
 let delProductModal = null;
 let errorAlertModal = null;
 let successAlertModal = null;
+let signOutModal = null;
 
 const app = Vue.createApp({
   data() {
@@ -31,10 +32,14 @@ const app = Vue.createApp({
       backdrop: 'static',
       keyboard: false
     });
+    signOutModal = new bootstrap.Modal(this.$refs.signOutModal, {
+      backdrop: 'static',
+      keyboard: false
+    });
   },
 
   created() {
-    if (token === '') window.location = '../index.html';
+    if (token === '') window.location = "../index.html";
     axios.defaults.headers.common.Authorization = token;
     this.getData();
   },
@@ -52,7 +57,7 @@ const app = Vue.createApp({
           this.pagination = res.data.pagination;
         })
         .catch(err => {
-          console.log(err);
+          this.openModal('error', 0, err.message);
         })
     },
 
@@ -63,14 +68,15 @@ const app = Vue.createApp({
         .then(res => {
           if (res.data.success) {
             document.cookie = 'user=; expires=; path=/';
-            window.location = '../index.html';
+            this.alertMessage = "成功登出"
+            signOutModal.show();
           }
           else {
-            console.log(res.data.message);
+            this.openModal('error', 0, res.data.message);
           }
         })
         .catch(err => {
-          console.log(err);
+          this.openModal('error', 0, err.message);
         })
     },
 
@@ -84,12 +90,14 @@ const app = Vue.createApp({
 
       axios.put(url, { data: this.newProduct })
         .then(res => {
-          if (!res.data.success) return;
-          this.openModal('success');
+          if (!res.data.success) {
+            this.openModal('error', 0, res.data.message);
+            return;
+          }
+          this.openModal('success', 0, res.data.message);
         })
         .catch(err => {
-          this.openModal('error');
-          console.log(err);
+          this.openModal('error', 0, err.message);
         })
     },
 
@@ -128,6 +136,5 @@ const app = Vue.createApp({
     },
   },
 })
-
 
 app.mount('#app');

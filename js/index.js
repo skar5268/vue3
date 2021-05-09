@@ -1,3 +1,5 @@
+import './validation.js';
+
 let errorAlertModal = null;
 let successAlertModal = null;
 
@@ -21,6 +23,10 @@ const app = Vue.createApp({
     created() {
         this.user.username = document.cookie.replace(/(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     },
+    components: {
+        VForm: VeeValidate.Form,
+        VField: VeeValidate.Field,
+    },
     methods: {
         login() {
             const api = 'https://dev-vue-course-api.hexschool.io/admin/signin';
@@ -34,11 +40,12 @@ const app = Vue.createApp({
                     }
                     else {
                         errorAlertModal.show();
-                        console.log(res.data)
+                        // console.log(res.data)
                     }
                 })
                 .catch((err) => {
-                    console.log(err)
+                    errorAlertModal.show();
+                    // console.log(err)
                 })
         },
     },

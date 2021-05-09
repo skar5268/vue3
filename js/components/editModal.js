@@ -51,6 +51,16 @@ export default {
                     <input type="number" class="form-control" id="newPrice" placeholder="20000"
                       v-model.number.lazy.trim="newProduct.price" :value="newProduct.price">
                   </div>
+                  <div class="col-12 mb-2">
+                      <label for="newContent" class="form-label d-block">商品描述</label>
+                      <textarea class="form-control" id="newContent" rows="3" placeholder="商品描述"
+                        v-model.lazy="newProduct.content" :value="newProduct.content"></textarea>
+                  </div>
+                  <div class="col-12 mb-3">
+                      <label for="newDescription" class="form-label d-block">說明內容</label>
+                      <textarea class="form-control" id="newDescription" rows="3" placeholder="說明內容"
+                        v-model.lazy="newProduct.description" :value="newProduct.description"></textarea>
+                  </div>
                   <div class="col-12">
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" id="is_enabledCheck"
@@ -93,7 +103,6 @@ export default {
             .catch(err => {
               this.$emit('getError', 'error', 0, err.message);
             })
-
           break;
 
         case 'edit':
