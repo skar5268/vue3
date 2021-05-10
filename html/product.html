@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 
 <head>
   <meta charset="UTF-8">
@@ -31,26 +31,28 @@
               <th scope="col">商品名稱</th>
               <th scope="col">原價</th>
               <th scope="col">售價</th>
-              <th scope="col">數量</th>
+              <th scope="col">單位</th>
               <th scope="col">是否啟用</th>
               <th scope="col" colspan="2" class="text-center">編輯</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, arr) in products" :key="item.id" class="text-center">
+            <tr v-for="(item) in products" :key="item.id" class="text-center">
               <th scope="row">{{ item.category }}</th>
               <td>{{ item.title }}</td>
               <td>$ {{ item.origin_price }}</td>
               <td>$ {{ item.price }}</td>
-              <td> {{ item.num }} {{ item.unit }}</td>
+              <td>{{ item.unit }}</td>
               <td>
-                <a href="#" class="fw-bold" @click.prevent="changeEnabled(arr)"
+                <a href="#" class="fw-bold" @click.prevent="changeEnabled(item)"
                   :class=" item.is_enabled? 'text-success' : 'text-danger' ">
                   {{ item.is_enabled? "啟用" : "不啟用"}}</a>
               </td>
               <td>
-                <button class="btn btn-primary mb-2 mb-md-0" @click.prevent="openModal('edit',  arr)">編輯</button>
-                <button class="btn btn-danger mx-0 mx-md-2" @click.prevent="openModal('delete',  arr)">刪除</button>
+                <button class="btn btn-primary mb-2 mb-md-0" @click.prevent="openModal('edit',  item)">
+                  <span class="h5 material-icons-round align-bottom mb-0">mode</span> 編輯</button>
+                <button class="btn btn-danger mx-0 mx-md-2" @click.prevent="openModal('delete',  item)">
+                  <span class="h5 material-icons-round align-bottom mb-0">delete_forever</span> 刪除</button>
               </td>
             </tr>
           </tbody>

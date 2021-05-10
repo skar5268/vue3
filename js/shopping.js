@@ -7,7 +7,7 @@ let delProductModal = null;
 let errorAlertModal = null;
 let successAlertModal = null;
 
-const apiPath = "skar5268";
+const apiPath = "pingu";
 const baseUrl = "https://vue-course-api.hexschool.io/api";
 
 const app = Vue.createApp({
@@ -21,6 +21,7 @@ const app = Vue.createApp({
             pagination: {},
             cartData: [],
             finalTotal: 0,
+            coupon: "",
             payement: "",
             data: {
                 user: {
@@ -83,13 +84,10 @@ const app = Vue.createApp({
                 })
         },
 
-        addCart(arr, num = 1) {
+        addCart(item, num = 1) {
             const url = `${baseUrl}/${apiPath}/cart`;
-            let product_id;
+            let product_id = item.id;
             let qty = num;
-
-            if (arr >= 0) product_id = this.products[arr].id;
-            else product_id = this.newProduct.id;
 
             const data = {
                 data: {
@@ -110,18 +108,18 @@ const app = Vue.createApp({
                 })
         },
 
-        openModal(modal, arr, message) {
+        openModal(modal, item, message) {
             this.alertMessage = message;
             switch (modal) {
                 case 'del':
                     this.modalTitle = "移除購物車";
-                    this.newProduct = { ...this.cartData[arr] };
+                    this.newProduct = { ...item };
                     this.newProductTitle = this.newProduct.product.title;
                     delProductModal.show();
                     break;
 
                 case 'detail':
-                    this.newProduct = { ...this.products[arr] };
+                    this.newProduct = { ...item };
                     this.modalTitle = this.newProduct.title;
                     this.$refs.productDetailModal.openModal();
                     break;
@@ -137,6 +135,30 @@ const app = Vue.createApp({
                 default:
                     break;
             }
+        },
+
+        useCoupon() {
+            const url = `${baseUrl}/${apiPath}/coupon`;
+            const data = {
+                data: {
+                    code: this.coupon
+                }
+            }
+            axios.post(url, data)
+                .then(res => {
+                    console.log(res)
+                    if (!res.data.success) {
+                        this.openModal('error', 0, res.data.message);
+                        return;
+                    }
+                    this.openModal('success', 0, res.data.message);
+                    this.finalTotal = res.data.data.final_total;
+
+                })
+                .catch(err => {
+                    this.openModal('error', 0, err.message);
+                    console.log(err)
+                })
         },
 
         sendOrder() {

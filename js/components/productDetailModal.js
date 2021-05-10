@@ -11,8 +11,8 @@ export default {
         this.modal = new bootstrap.Modal(this.$refs.modal);
     },
     methods: {
-        addCartModal() {
-            this.$emit('add', -1, this.qty);
+        addCartModal(item) {
+            this.$emit('add', item, this.qty);
             this.hideModal()
         },
         openModal() {

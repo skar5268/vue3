@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 
 <head>
     <meta charset="UTF-8">
@@ -26,21 +26,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, arr) in products" :key="item.id" class="text-center">
-                                <td style="width: 200px">
+                            <tr v-for="item in products" :key="item.id" class="text-center">
+                                <td style="width: 150px; height: 150px;">
                                     <img :src="item.image" :alt="item.title">
                                 </td>
                                 <td>{{ item.title }}</td>
-                                <td v-if="item.origin_price == undefined " class="text-start">$ {{ item.price }}</td>
-                                <td v-else class="text-start">
-                                    <del>原價 {{ item.origin_price }} 元</del>
-                                    <h5>現在只要 {{ item.price }} 元</h5>
+                                <td v-if="item.origin_price == undefined">$ {{ item.price }}</td>
+                                <td v-else>
+                                    <p class="h5 mt-1">$ {{ item.price }}</p>
                                 </td>
                                 <td>
                                     <button class="btn btn-primary mb-2 mb-md-0"
-                                        @click.prevent="openModal('detail',  arr)">查看更多</button>
+                                        @click.prevent="openModal('detail',  item)">
+                                        <span class="material-icons-round align-bottom">sort</span> 查看更多</button>
                                     <button class="btn btn-danger mx-0 mx-md-2"
-                                        @click.prevent="addCart(arr)">加到購物車</button>
+                                        @click.prevent="addCart(item)">
+                                        <span class="material-icons-round align-bottom">add</span> 加到購物車</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -51,21 +52,19 @@
                 </div>
                 <div class="col-12 col-lg-5">
                     <h2 class="fw-bold">購物車</h2>
-                    <table class="table table-striped table-borderless table-hover align-middle">
+                    <table class="table table-hover align-middle">
                         <thead class="text-center">
                             <tr>
-                                <th scope="col"></th>
                                 <th scope="col">品名</th>
                                 <th scope="col">數量</th>
                                 <th scope="col">單價</th>
                                 <th scope="col">小計</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, arr) in cartData" :key="item.id" class="text-center">
-                                <td> <button class="btn btn-danger mx-0"
-                                        @click.prevent="openModal('del',  arr)">移除購物車</button> </td>
-                                <td>{{ item.product.title }}</td>
+                            <tr v-for="item in cartData" :key="item.id" class="text-center">
+                                <th>{{ item.product.title }}</th>
                                 <td style="width: 150px">
                                     <div class="input-group">
                                         <input type="number" class="form-control" :value="item.qty" v-model="item.qty"
@@ -75,22 +74,26 @@
                                 </td>
                                 <td>{{ item.product.price }}</td>
                                 <td>{{ item.product.price*item.qty }}</td>
+                                <td> <button class="btn text-danger" @click.prevent="openModal('del',  item)">
+                                        <span class="material-icons-round align-bottom h3 mb-0">delete_forever</span>
+                                    </button> </td>
                             </tr>
                         </tbody>
                         <tfoot class="border-top">
                             <tr>
-                                <td colspan="2">
+                                <td colspan="3" class="align-top">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="請輸入優惠碼">
-                                        <button class="btn btn-outline-secondary" type="button">套用優惠碼</button>
+                                        <input type="text" class="form-control" placeholder="請輸入優惠碼"
+                                        :value="coupon" v-model.lazy="coupon">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                        @click="useCoupon">套用優惠碼</button>
                                     </div>
                                 </td>
-                                <td colspan="3" class="text-end">
+                                <td colspan="2" class="text-end">
                                     <p>總計：{{ finalTotal }}</p>
-                                    <p class="text-success">折扣價： 123</p>
+                                    <p class="text-success">折扣價： {{ finalTotal }}</p>
                                 </td>
                             </tr>
-
                         </tfoot>
                     </table>
                     <button type="submit" class="btn btn-primary">
@@ -208,7 +211,8 @@
             <div class="modal-dialog modal-lg  modal-dialog-centered">
                 <div class="modal-content border-0">
                     <div class="modal-header bg-primary py-2">
-                        <h5 class="modal-title fw-bold text-light">{{ modalTitle }}</h5>
+                        <h5 class="modal-title fw-bold text-light lh-sm">
+                            <span class="material-icons-round align-bottom">sort</span> {{ modalTitle }}</h5>
                         <button type="button" class="btn text-light" data-bs-dismiss="modal" aria-label="Close">
                             <span class="material-icons-round lh-base">close</span>
                         </button>
@@ -228,13 +232,18 @@
                                         <div class="col-12 mb-2">
                                             <p>商品描述：{{ newProduct.content }}</p>
                                             <p>商品內容：{{ newProduct.description }}</p>
-                                            <del>原價 {{ newProduct.origin_price }} 元</del>
-                                            <h5>現在只要 {{ newProduct.price }} 元</h5>
+                                            <template v-if="newProduct.origin_price == newProduct.price">
+                                                <h5>只要 {{ newProduct.price }} 元</h5>
+                                            </template>
+                                            <template v-else>
+                                                <del>原價 {{ newProduct.origin_price }} 元</del>
+                                                <h5>現在只要 {{ newProduct.price }} 元</h5>
+                                            </template>
                                         </div>
                                         <div class="input-group col-12 mb-3">
                                             <input type="number" class="form-control" id="newQty" min="1" v-model.number="this.qty" :value="this.qty">
                                             <button class="btn btn-outline-secondary" type="button"
-                                            @click.prevent="addCartModal">加入購物車</button>
+                                            @click.prevent="addCartModal(newProduct)">加入購物車</button>
                                         </div>
                                     </div>
                                 </div>

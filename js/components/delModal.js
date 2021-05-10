@@ -2,7 +2,8 @@ export default {
   template: `<div class="modal-dialog modal-md  modal-dialog-centered">
   <div class="modal-content border-0">
     <div class="modal-header bg-danger py-2">
-      <h5 class="modal-title fw-bold text-light">{{ modalTitle }}</h5>
+      <h5 class="modal-title fw-bold text-light lh-sm">
+      <span class="material-icons-round align-bottom">delete_forever</span> {{ modalTitle }}</h5>
       <button type="button" class="btn text-light" data-bs-dismiss="modal" aria-label="Close">
         <span class="material-icons-round lh-base">close</span>
       </button>
@@ -23,11 +24,11 @@ export default {
 
   methods: {
     delProduct() {
-      const apiPath = "skar5268";
+      const apiPath = "pingu";
       const baseUrl = "https://vue-course-api.hexschool.io/api";
       let url;
 
-      if (location.href == "http://127.0.0.1:5500/html/shopping.html") {
+      if (location.href == "https://skar5268.github.io/vue3/html/shopping.html") {
         url = `${baseUrl}/${apiPath}/cart/${this.newProduct.id}`;
       } else {
         url = `${baseUrl}/${apiPath}/admin/product/${this.newProduct.id}`;

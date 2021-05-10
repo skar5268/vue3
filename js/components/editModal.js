@@ -2,7 +2,8 @@ export default {
   template: `<div class="modal-dialog modal-lg  modal-dialog-centered">
       <div class="modal-content border-0">
         <div class="modal-header bg-primary py-2">
-          <h5 class="modal-title fw-bold text-light">{{ modalTitle }}</h5>
+          <h5 class="modal-title fw-bold text-light lh-sm">
+          <span class="material-icons-round align-bottom">mode</span> {{ modalTitle }}</h5>
           <button type="button" class="btn text-light"  data-bs-dismiss="modal" aria-label="Close">
            <span class="material-icons-round lh-base">close</span>
           </button>
@@ -26,17 +27,12 @@ export default {
                     <input type="text" class="form-control" id="newTitle" placeholder="商品名稱"
                       v-model.lazy.trim="newProduct.title" :value="newProduct.title">
                   </div>
-                  <div class="col-12 col-md-4  mb-2">
+                  <div class="col-12 col-md-6  mb-2">
                     <label for="newCategory" class="form-label d-block">分類</label>
                     <input type="text" class="form-control" id="newCategory" placeholder="商品類別"
                       v-model.lazy.trim="newProduct.category" :value="newProduct.category">
                   </div>
-                  <div class="col-12 col-md-4  mb-2">
-                    <label for="newNum" class="form-label d-block">數量</label>
-                    <input type="number" class="form-control" id="newNum" placeholder="10"
-                      v-model.number.lazy.trim="newProduct.num" :value="newProduct.num">
-                  </div>
-                  <div class="col-12 col-md-4  mb-2">
+                  <div class="col-12 col-md-6  mb-2">
                     <label for="newUnit" class="form-label d-block">單位</label>
                     <input type="text" class="form-control" id="newUnit" placeholder="台"
                       v-model.lazy.trim="newProduct.unit" :value="newProduct.unit">
@@ -44,12 +40,12 @@ export default {
                   <div class="col-12 col-md-6  mb-2">
                     <label for="newOrigin_price" class="form-label d-block">原價</label>
                     <input type="number" class="form-control" id="newOrigin_price" placeholder="20000"
-                      v-model.number.lazy.trim="newProduct.origin_price" :value="newProduct.origin_price">
+                      v-model.number.lazy="newProduct.origin_price" :value="newProduct.origin_price">
                   </div>
                   <div class="col-12 col-md-6  mb-3">
                     <label for="newPrice" class="form-label d-block">售價</label>
                     <input type="number" class="form-control" id="newPrice" placeholder="20000"
-                      v-model.number.lazy.trim="newProduct.price" :value="newProduct.price">
+                      v-model.number.lazy="newProduct.price" :value="newProduct.price">
                   </div>
                   <div class="col-12 mb-2">
                       <label for="newContent" class="form-label d-block">商品描述</label>
@@ -87,13 +83,14 @@ export default {
 
   methods: {
     updateProduct(update) {
-      const apiPath = "skar5268";
+      const apiPath = "pingu";
       const baseUrl = "https://vue-course-api.hexschool.io/api";
       let url = `${baseUrl}/${apiPath}/admin/product`;
       let data = {};
       switch (update) {
         case 'add':
           this.newProduct.id = Date.now();
+
           data = { data: this.newProduct };
           axios.post(url, data)
             .then(res => {

@@ -2,7 +2,7 @@ import pageNavigation from './components/pageNavigation.js';
 import editModal from './components/editModal.js';
 import delModal from './components/delModal.js';
 
-const apiPath = "skar5268";
+const apiPath = "pingu";
 const baseUrl = "https://vue-course-api.hexschool.io/api";
 
 const token = document.cookie.replace(/(?:(?:^|.*;\s*)user\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -80,9 +80,9 @@ const app = Vue.createApp({
         })
     },
 
-    changeEnabled(arr) {
+    changeEnabled(item) {
 
-      this.newProduct = { ...this.products[arr] };
+      this.newProduct = { ...item };
 
       const url = `${baseUrl}/${apiPath}/admin/product/${this.newProduct.id}`;
 
@@ -101,24 +101,26 @@ const app = Vue.createApp({
         })
     },
 
-    openModal(isNew, arr, message) {
+    openModal(isNew, item, message) {
       this.alertMessage = message;
       switch (isNew) {
         case 'new':
           this.modalTitle = "新增商品";
           this.newProduct = {};
           productModal.show();
+          console.log(this.newProduct)
           break;
 
         case 'edit':
           this.modalTitle = "編輯商品"
-          this.newProduct = { ...this.products[arr] };
+          this.newProduct = { ...item };
+          console.log(this.newProduct)
           productModal.show();
           break;
 
         case 'delete':
           this.modalTitle = "刪除商品"
-          this.newProduct = { ...this.products[arr] };
+          this.newProduct = { ...item };
           delProductModal.show();
           break;
 
